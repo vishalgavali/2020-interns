@@ -76,10 +76,8 @@ request.onload =  function() {
   rate1= Object.keys(data["rates"]);
   var st = document.getElementById('from').value;
   
-  //var start1 = st.slice(0,10).split("-").reverse().join("-");
   var start = Date.parse(st);
   var en = document.getElementById('to').value;
- // var end1 = en.slice(0,10).split("-").reverse().join("-");
   var end  = Date.parse(en);
   var f_date=[];
   for (var i=0; i<rate1.length; i++)

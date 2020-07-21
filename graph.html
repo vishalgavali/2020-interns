@@ -5,15 +5,22 @@
 </head>
 <body>
 <br><br>
+<p>You will require an Internet connection to load the graphs.</p>
+<h1>The graph of INR exchange rate against EUR from 1 Jan 2019 to 31 Jan 2019</h1>
 <canvas id="can" width="1200" height="400" style="border:1px solid #000000;">
 Your browser does not support the canvas.
 
 
 </canvas><br>
-<h1>The graph of INR exchange rate against EUR from 1 Jan 2019 to 31 Jan 2019</h1> <br>
-<h1>You can select date range and currency to get the graph</h1>
 
-<a href="exp_date.html">To select date Click here</a>
+
+<h1>The graph of INR and GBP exchange rate against EUR from 1 Jan 2019 to 31 Jan 2019.</h1>
+<canvas id="can1" width="1400" height="400" style="border:1px solid #000000;">
+Your browser does not support the canvas.
+</canvas><br>
+<h1>You can select date range and currency to get the graph <a href="exp_date.html">Click here</a>
+</h1>
+
 
 
 <script>
@@ -26,6 +33,7 @@ request.send();
 request.onload = function() {
   const data = request.response;
   draw1(data);
+  draw2(data);
   }
   
   function draw1(data){
@@ -73,6 +81,69 @@ request.onload = function() {
 			ctx.fillText(100,0,200);
 			for(var l=0; l<indp.length; l++){
 				ctx.fillText('Bar '+l+' : ' + indp[l]+' INR - '+ f_date[l]+ '\n',1000,(l*16)+20);
+			}
+			
+}
+  function draw2(data){
+  var rate = new Array();
+  rate= Object.keys(data.rates);
+  var start = 1546300800000;
+  var end = 1548892800000;
+  var f_date=[];
+  for (var i=0; i<rate.length; i++)
+  {
+	
+	var x = rate[i].slice(0,10).split("-").join("-");
+	var y = Date.parse(x);
+	if (y>=start && y<=end){
+	f_date.push(rate[i]);
+	}
+  }
+	var indp = [];
+	var gbp = [];
+  for(var j=0; j<f_date.length;j++){
+	indp.push(data.rates[f_date[j]]["INR"])
+	gbp.push(data.rates[f_date[j]]["GBP"])
+  }
+
+        var canvas = document.getElementById('can1');
+        var ctx = canvas.getContext('2d');
+		
+        var width = 15; //bar width
+        var X = 30; // first bar position 
+        
+        for (var k =0; k<indp.length; k++) {
+            ctx.fillStyle = '#008080';
+			
+            var h = indp[k]*2;
+			var s = gbp[k]*2;
+            ctx.fillRect(X,canvas.height - h,width,h);
+			ctx.fillStyle = '#FF0000';
+			ctx.fillRect(X+15,canvas.height-s,width,s);
+            
+            X +=  width+25;
+            /* text to display Bar number */
+            ctx.fillStyle = '#4da6ff';
+            ctx.fillText('Bar '+k,X-50,canvas.height - h -10);	
+        }
+           
+			ctx.moveTo(20, 200);
+			ctx.lineTo(900, 200);
+			ctx.stroke();
+            ctx.fillStyle = '#000000';
+            ctx.fillText('Scale X : '+canvas.width+'pixel 2Y : 1 INR '+canvas.height,800,10);
+			ctx.fillText(100,0,200);
+			
+			ctx.fillStyle = '#008080';
+			ctx.fillRect(800,20,10,10);
+			ctx.fillText('INR',815,28);
+			ctx.fillStyle = '#FF0000';
+			ctx.fillRect(800,35,10,10);
+			ctx.fillText('GBP',816,42);
+			ctx.fillStyle = '#000000';
+			for(var l=0; l<indp.length; l++){
+				ctx.fillText('Bar '+l+' : ' + indp[l]+' INR - '+ f_date[l]+ '\n',1000,(l*16)+20);
+				ctx.fillText('Bar '+l+' : ' + gbp[l]+' GBP - '+ f_date[l]+ '\n',1200,(l*16)+20);
 			}
 			
 }
