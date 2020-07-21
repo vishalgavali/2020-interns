@@ -5,11 +5,49 @@
 </head>
 <body>
 <br><br>
-<h1>You can select date range to get the graph</h1>
+<h1>You can select date range and currency to get the graph</h1>
 <label for="from">From date:</label>
 <input type="date" id="from" name="from"> <br><br>
 <label for="to">To date:</label>
 <input type="date" id="to" name="to"> <br><br>
+
+<label for="cur">Choose a Currency:</label>
+  <select name="cur" id="cur">
+    <option value="CAD">CAD</option>
+    <option value="	SKD">SKD</option>
+    <option value="PHP">PHP</option>
+    <option value="DKK">DKK</option>
+	<option value="HUF">HUF</option>
+    <option value="CZK">CZK</option>
+    <option value="AUD">AUD</option>
+    <option value="RON">RON</option>
+    <option value="SEK">SEK</option>
+    <option value="IDR">IDR</option>
+    <option value="INR">INR</option>
+    <option value="BRL">BRL</option>
+    <option value="RUB">RUB</option>
+    <option value="HRK">HRK</option>
+    <option value="JPY">JPY</option>
+    <option value="THB">THB</option>
+    <option value="CHF">CHF</option>
+    <option value="SGD">SGD</option>
+    <option value="PLN">PLN</option>
+    <option value="BGN">BGN</option>
+    <option value="TRY">TRY</option>
+    <option value="CNY">CNY</option>
+    <option value="NOK">NOK</option>
+    <option value="NZD">NZD</option>
+    <option value="ZAR">ZAR</option>
+    <option value="USD">USD</option>
+    <option value="MXN">MXN</option>
+    <option value="ILS">ILS</option>
+    <option value="GBP">GBP</option>
+    <option value="KRW">KRW</option>
+    <option value="MYR">MYR</option>
+    
+
+  </select>
+  <br><br>
 <input type="button" value="Submit" name="Submit" onclick="draw2()"><br><br>
 <canvas id="can" width="1200" height="400" style="border:1px solid #000000;">
 Your browser does not support the canvas.
@@ -54,8 +92,9 @@ request.onload =  function() {
 	}
   }
 	var indp = [];
+	var curr = document.getElementById('cur').value;
   for(var j=0; j<f_date.length;j++){
-	indp.push(data.rates[f_date[j]]["INR"])
+	indp.push(data.rates[f_date[j]][curr])
   }
 
         var canvas = document.getElementById('can');
