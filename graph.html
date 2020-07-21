@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+<body>
+<br><br>
+<canvas id="can" width="1200" height="400" style="border:1px solid #000000;">
+Your browser does not support the canvas.
+</canvas><br>
+<h>The graph of INR exchange rate against EUR from 1 Jan 2019 to 31 Jan 2019</h>
+
+
+<script>
+
+let requestURL = 'https://raw.githubusercontent.com/winsoft-technologies/2020-interns/master/data.json';
+let request = new XMLHttpRequest();
+request.open('GET', requestURL);
+request.responseType = 'json';
+request.send();
+request.onload = function() {
+  const data = request.response;
+  var rate = new Array();
+  rate= Object.keys(data.rates);
+  var start = 1546300800000;
+  var end = 1548892800000;
+  var f_date=[];
+  for (var i=0; i<rate.length; i++)
+  {
+	
+	var x = rate[i].slice(0,10).split("-").join("-");
+	var y = Date.parse(x);
+	if (y>=start && y<=end){
+	f_date.push(rate[i]);
+	}
+  }
+	var indp = [];
+  for(var j=0; j<f_date.length;j++){
+	indp.push(data.rates[f_date[j]]["INR"])
+  }
+
+        var canvas = document.getElementById('can');
+        var ctx = canvas.getContext('2d');
+		
+        var width = 20; 
+        var X = 30;  
+        
+        for (var k =0; k<indp.length; k++) {
+            ctx.fillStyle = '#008080'; 
+            var h = indp[k]*2;
+            ctx.fillRect(X,canvas.height - h,width,h);
+            
+            X +=  width+20;
+            
+            ctx.fillStyle = '#4da6ff';
+            ctx.fillText('Bar '+k,X-50,canvas.height - h -10);	
+        }
+           
+			ctx.moveTo(20, 200);
+			ctx.lineTo(900, 200);
+			ctx.stroke();
+            ctx.fillStyle = '#000000';
+            ctx.fillText('Scale X : '+canvas.width+'pixel 2Y : 1 INR '+canvas.height,800,10);
+			ctx.fillText(100,0,200);
+			for(var l=0; l<indp.length; l++){
+				ctx.fillText('Bar '+l+' : ' + indp[l]+' INR - '+ f_date[l]+ '\n',1000,(l*16)+20);
+			}
+			
+}
+
+
+
+</script>
+
+</body>
+</html>
