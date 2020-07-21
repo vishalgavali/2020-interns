@@ -7,8 +7,13 @@
 <br><br>
 <canvas id="can" width="1200" height="400" style="border:1px solid #000000;">
 Your browser does not support the canvas.
+
+
 </canvas><br>
-<h>The graph of INR exchange rate against EUR from 1 Jan 2019 to 31 Jan 2019</h>
+<h1>The graph of INR exchange rate against EUR from 1 Jan 2019 to 31 Jan 2019</h1> <br>
+<h1>You can select date range to get the graph</h1>
+
+<a href="exp_date.html">To select date Click here</a>
 
 
 <script>
@@ -20,6 +25,10 @@ request.responseType = 'json';
 request.send();
 request.onload = function() {
   const data = request.response;
+  draw1(data);
+  }
+  
+  function draw1(data){
   var rate = new Array();
   rate= Object.keys(data.rates);
   var start = 1546300800000;
@@ -42,8 +51,8 @@ request.onload = function() {
         var canvas = document.getElementById('can');
         var ctx = canvas.getContext('2d');
 		
-        var width = 20; 
-        var X = 30;  
+        var width = 20; //bar width
+        var X = 30; // first bar position 
         
         for (var k =0; k<indp.length; k++) {
             ctx.fillStyle = '#008080'; 
@@ -51,7 +60,7 @@ request.onload = function() {
             ctx.fillRect(X,canvas.height - h,width,h);
             
             X +=  width+20;
-            
+            /* text to display Bar number */
             ctx.fillStyle = '#4da6ff';
             ctx.fillText('Bar '+k,X-50,canvas.height - h -10);	
         }
@@ -68,7 +77,7 @@ request.onload = function() {
 			
 }
 
-
+ 
 
 </script>
 

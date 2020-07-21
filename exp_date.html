@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+<body>
+<br><br>
+<h1>You can select date range to get the graph</h1>
+<label for="from">From date:</label>
+<input type="date" id="from" name="from"> <br><br>
+<label for="to">To date:</label>
+<input type="date" id="to" name="to"> <br><br>
+<input type="button" value="Submit" name="Submit" onclick="draw2()"><br><br>
+<canvas id="can" width="1200" height="400" style="border:1px solid #000000;">
+Your browser does not support the canvas.
+
+
+</canvas><br>
+
+
+
+<script>
+ function draw2()
+ {
+let requestURL = 'https://raw.githubusercontent.com/winsoft-technologies/2020-interns/master/data.json';
+let request = new XMLHttpRequest();
+request.open('GET', requestURL);
+request.responseType = 'json';
+request.send();
+request.onload =  function() {
+  const data = request.response;
+  draw3(data);
+  }
+  }
+ function draw3(data){
+
+	var rate1 = new Array();
+  rate1= Object.keys(data["rates"]);
+  var st = document.getElementById('from').value;
+  
+  //var start1 = st.slice(0,10).split("-").reverse().join("-");
+  var start = Date.parse(st);
+  var en = document.getElementById('to').value;
+ // var end1 = en.slice(0,10).split("-").reverse().join("-");
+  var end  = Date.parse(en);
+  var f_date=[];
+  for (var i=0; i<rate1.length; i++)
+  {
+	
+	var x = rate1[i].slice(0,10).split("-").join("-");
+	var y = Date.parse(x);
+	if (y>=start && y<=end){
+	f_date.push(rate1[i]);
+	}
+  }
+	var indp = [];
+  for(var j=0; j<f_date.length;j++){
+	indp.push(data.rates[f_date[j]]["INR"])
+  }
+
+        var canvas = document.getElementById('can');
+        var ctx1 = canvas.getContext('2d');
+		
+        var width = 20; //bar width
+        var X = 30; // first bar position 
+        
+        for (var k =0; k<indp.length; k++) {
+            ctx1.fillStyle = '#008080'; 
+            var h = indp[k]*2;
+            ctx1.fillRect(X,canvas.height - h,width,h);
+            
+            X +=  width+20;
+            /* text to display Bar number */
+            ctx1.fillStyle = '#4da6ff';
+            ctx1.fillText('Bar '+k,X-50,canvas.height - h -10);	
+        }
+           
+			ctx1.moveTo(20, 200);
+			ctx1.lineTo(900, 200);
+			ctx1.stroke();
+            ctx1.fillStyle = '#000000';
+            ctx1.fillText('Scale X : '+canvas.width+'pixel 2Y : 1 INR '+canvas.height,800,10);
+			ctx1.fillText(100,0,200);
+			for(var l=0; l<indp.length; l++){
+				ctx1.fillText('Bar '+l+' : ' + indp[l]+' INR - '+ f_date[l]+ '\n',1000,(l*16)+20);
+			}
+			
+ }
+
+</script>
+
+</body>
+</html>
